@@ -1,39 +1,102 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+@use "sass:map";
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$template_frontend-primary: mat.define-palette(mat.$indigo-palette);
-$template_frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$my-blue-palette: (
+    50 : #EBF5FF,
+    100 : #E1EFFE,
+    200 : #C3DDFD,
+    300 : #A4CAFE,
+    400 : #76A9FA,
+    500 : #3F83F8,
+    600 : #1C64F2,
+    700 : #1A56DB,
+    800 : #1E429F,
+    900 : #233876,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+    )
+);
 
-// The warn palette is optional (defaults to red).
-$template_frontend-warn: mat.define-palette(mat.$red-palette);
+$my-grey-palette: (
+    50 : #F9FAFB,
+    100 : #F3F4F6,
+    200 : #E5E7EB,
+    300 : #D1D5DB,
+    400 : #9CA3AF,
+    500 : #6B7280,
+    600 : #4B5563,
+    700 : #374151,
+    800 : #1F2937,
+    900 : #111827,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+    )
+);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$template_frontend-theme: mat.define-light-theme((
-  color: (
-    primary: $template_frontend-primary,
-    accent: $template_frontend-accent,
-    warn: $template_frontend-warn,
-  )
+$custom-dark-background: (
+    background: map.get($my-grey-palette, 900),
+    card: map.get($my-grey-palette, 700),
+    dialog: map.get($my-grey-palette, 700),
+    raised-button: map.get($my-blue-palette, 600),
+    selected-button: map.get($my-blue-palette, 600),
+);
+
+
+$portfolio-dark-theme: mat.define-dark-theme((
+    color: (
+        primary: mat.define-palette($my-grey-palette, 800, 600, 900),
+        accent: mat.define-palette($my-blue-palette, 600, 500, 700),
+        warn: mat.define-palette(mat.$red-palette),
+    ),
+    typography: mat.define-typography-config(),
+    density: 0
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($template_frontend-theme);
+$my-theme: mat.define-light-theme((
+    color: (
+        primary: mat.define-palette(mat.$indigo-palette, 500),
+        accent: mat.define-palette(mat.$pink-palette, A200, A100, A400),
+        warn: mat.define-palette(mat.$red-palette),
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+));
 
-/* You can add global styles to this file, and also import other style files */
+$color-dark-map: map.get($portfolio-dark-theme, 'color');
+$dark-color-map: map.merge($color-dark-map, ('background': $custom-dark-background));
+$portfolio-dark-theme: map.merge($portfolio-dark-theme, ('color': $dark-color-map));
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@include mat.all-component-themes($my-theme);
+
+body.dark-theme {
+    @include mat.all-component-colors($portfolio-dark-theme);
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}

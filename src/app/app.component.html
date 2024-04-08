@@ -1,2 +1,39 @@
-<h1>Welcome to {{title}}!</h1>
-<router-outlet />
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+        #drawer
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        class="sidenav"
+        fixedInViewport>
+        <mat-toolbar color="primary">Menu</mat-toolbar>
+        <mat-nav-list>
+            @for (page of pages;track page.link) {
+                <a mat-list-item routerLink="{{page.link}}" routerLinkActive="active-link">{{ page.text }}</a>
+            }
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="container">
+        <mat-toolbar color="primary">
+            @if (isHandset$ | async) {
+                <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+                    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+                </button>
+            }
+            <span>template_frontend</span>
+            <span class="spacer"></span>
+            @if (!(isHandset$ | async)) {
+                @for (page of pages;track page.link) {
+                    <a class="router-link" mat-button routerLink="{{page.link}}"
+                       routerLinkActive="router-link-active">{{ page.text }}
+                    </a>
+                }
+            }
+            <button (click)="toggleTheme()" color="" mat-icon-button type="button">
+                <mat-icon>{{ isDarkMode ? 'wb_sunny' : 'nights_stay' }}</mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

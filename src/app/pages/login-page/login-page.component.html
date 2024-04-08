@@ -1,0 +1,32 @@
+<div class="login-form-flex">
+    <img alt="test" height="200" ngSrc="assets/angular.svg" width="200"/>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <h1>Login</h1>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="form-content">
+                <mat-form-field>
+                    <input formControlName="username" matInput placeholder="User Name">
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName="password" matInput placeholder="Password" type="password">
+                </mat-form-field>
+            </form>
+            @for (role of roles;track role) {
+                <p>role</p>
+            }
+        </mat-card-content>
+        <mat-card-actions>
+            <div class="button-flex-container">
+                <button (click)="onSubmit()" [disabled]="loginForm.invalid" color="accent" mat-raised-button
+                        type="button">Login
+                </button>
+
+            </div>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
